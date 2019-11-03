@@ -1,0 +1,31 @@
+.cardsContainer>.card {
+    font-size: 2em;
+    flex: 1 1 calc(100% / 6 - 0.4em);
+    background-color: white;
+    outline: 0.1em solid silver;
+    display: flex;
+    cursor: default;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.cardsContainer>.card.hidden {
+    background: #282b33;
+}
+
+.cardsContainer>.card.justMatched,
+.cardsContainer>.card.justMismatched {
+    outline: 0.1em solid #00b76b;
+}
+
+.cardsContainer>.card.justMismatched {
+    outline-color: #fc3232;
+}
+
+.cardsContainer>.card.visible {
+    cursor: not-allowed;
+}
+
+.cardsContainer>.card>.symbol {
+    margin: auto;
+}
