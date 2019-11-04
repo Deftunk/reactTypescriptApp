@@ -1,14 +1,36 @@
-import * as React from 'react';
+import React, { Component } from 'react'
+import shuffle from 'lodash.shuffle'
+
+// You can find imports from custom components
+import Card from './Card/Card';
+import GuessCount from './GuessCount/GuessCount';
+import HallOfFame, { FAKE_HOF } from './HallOfFame/HallOfFame'
 import Header from './Header/Header'
 import Separator from './Separator/Separator'
+
+
+// Global style for the app is reach there
 import './App.css';
-import GuessCount from './GuessCount/GuessCount';
-import Card from './Card/Card';
 
-export default class App extends React.Component {
+const SIDE = 3
+const SYMBOLS = '😀🎉💖🎩🐶🐱🦄🐬🌍🌛🌞💫🍎🍌🍓🍐🍟🍿'
 
+
+export default class App extends Component {
+  cards = this.generateCards()
   user = {
     admin: true
+  }
+
+  generateCards() {
+    const result: any[] = [];
+    const size = SIDE * SIDE
+    const candidates = shuffle(SYMBOLS)
+    while (result.length < size) {
+      const card = candidates.pop()
+      result.push(card)
+    }
+    return shuffle(result)
   }
 
   handleCardClick(card) {
@@ -16,23 +38,24 @@ export default class App extends React.Component {
   }
 
   render() {
-    const won = new Date().getSeconds() % 2 === 0
     return (
       <div className="App">
-        <Header> </Header>
-        <Separator></Separator>
+        <Header />
+        <Separator />
         <GuessCount guesses={0} />
-        <p>{this.user.admin && <a href="/admin">Faire des trucs de VIP</a>}</p>
-        <Separator></Separator>
+        <Separator />
         <div className="cardsContainer">
-          <Card card="😀" feedback="hidden" onClick={this.handleCardClick} />
-          <Card card="🎉" feedback="justMatched" onClick={this.handleCardClick} />
-          <Card card="💖" feedback="justMismatched" onClick={this.handleCardClick} />
-          <Card card="🎩" feedback="visible" onClick={this.handleCardClick} />
-          <Card card="🐶" feedback="hidden" onClick={this.handleCardClick} />
-          <Card card="🐱" feedback="justMatched" onClick={this.handleCardClick} />
+          {
+            this.cards.map((card, index) => {
+              return <Card
+                card={card}
+                key={index}
+                feedback="visible"
+                onClick={this.handleCardClick} />
+            })}
         </div>
-        {won && <p>GAGNÉ !</p>}
+        <Separator />
+        <HallOfFame entries={FAKE_HOF} />
       </div>
     );
   };
