@@ -1,62 +1,73 @@
 import React, { Component } from 'react'
-import shuffle from 'lodash.shuffle'
 
 // You can find imports from custom components
-import Card from './Card/Card';
-import GuessCount from './GuessCount/GuessCount';
-import HallOfFame, { FAKE_HOF } from './HallOfFame/HallOfFame'
 import Header from './Header/Header'
 import Separator from './Separator/Separator'
 
-
 // Global style for the app is reach there
 import './App.css';
+import { Card, CardMedia, Grid, Container, CardActionArea, CardContent, Typography } from '@material-ui/core';
 
-const SIDE = 3
-const SYMBOLS = '😀🎉💖🎩🐶🐱🦄🐬🌍🌛🌞💫🍎🍌🍓🍐🍟🍿'
+interface AppProps {
+}
 
-
-export default class App extends Component {
-  cards = this.generateCards()
-  user = {
-    admin: true
-  }
-
-  generateCards() {
-    const result: any[] = [];
-    const size = SIDE * SIDE
-    const candidates = shuffle(SYMBOLS)
-    while (result.length < size) {
-      const card = candidates.pop()
-      result.push(card)
+interface AppState {
+  spotifyCredentials: object | null
+  spotifyUser: any
+}
+export default class App extends Component<AppProps, AppState> {
+  constructor(props) {
+    super(props)
+    this.state = {
+      spotifyUser: null,
+      spotifyCredentials: null,
     }
-    return shuffle(result)
   }
 
-  handleCardClick(card) {
-    console.log(card, 'clicked')
+  spotifyLoginCb = (user, credentials) => {
+    this.setState({
+      spotifyCredentials: credentials,
+      spotifyUser: user
+    });
   }
 
-  render() {
-    return (
-      <div className="App">
-        <Header />
-        <Separator />
-        <GuessCount guesses={0} />
-        <Separator />
-        <div className="cardsContainer">
-          {
-            this.cards.map((card, index) => {
-              return <Card
-                card={card}
-                key={index}
-                feedback="visible"
-                onClick={this.handleCardClick} />
-            })}
-        </div>
-        <Separator />
-        <HallOfFame entries={FAKE_HOF} />
-      </div>
-    );
+  render = () => {
+    if (this.state.spotifyUser) {
+      console.log(this.state.spotifyUser.images);
+    }
+
+    return <div className="App">
+      <Header connexionCallback={this.spotifyLoginCb} />
+      <Container>
+        <Grid container
+          direction="column"
+          justify="center"
+          alignItems="stretch">
+          <Grid item>
+            <Grid container direction="row" justify="center">
+              <Grid item>
+                {this.state.spotifyUser ? <Card style={{ maxWidth: 345 }}>
+                  <CardActionArea>
+                    <CardMedia
+                      style={{ height: 140, width: 300 }}
+                      image={this.state.spotifyUser.images[0].url}
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {this.state.spotifyUser.display_name}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card> : <div></div>}
+              </Grid>
+
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Separator />
+          </Grid>
+        </Grid>
+      </Container>
+    </div>
   };
 }

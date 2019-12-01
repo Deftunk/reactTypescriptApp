@@ -1,7 +1,22 @@
 .header {
     padding: 20px;
+    background-color: #eaf0ff;
+}
+
+h1 {
+    margin: 0;
+}
+
+h4 {
+    margin: 0;
 }
 
 a {
     color: #00b76b;
+}
+
+.header-burger {}
+
+.header-title {
+    flex-grow: 1;
 }
