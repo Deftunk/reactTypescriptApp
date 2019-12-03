@@ -28,8 +28,7 @@ export default class Tracks extends React.Component<TracksProps, TracksState> {
     }
 
     render = () => {
-        if (this.state && this.state.tracks.length) {
-            console.log("yes");
+        if (this.state && this.state.tracks.length) {            
             return <GridList cellHeight={160} cols={3}>
                 {this.state.tracks.map(({ track }) => (
                     <GridListTile key={track.id}>
