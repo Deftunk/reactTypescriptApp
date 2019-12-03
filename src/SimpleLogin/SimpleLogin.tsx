@@ -1,30 +1,64 @@
 import React from "react"
 import { Button } from "@material-ui/core"
+import { UserContext, SpotifyUser, SpotifyCredentials } from '../User/User-context'
 
 export const authEndpoint = 'https://accounts.spotify.com/authorize';
 
-interface SimpleLoginProps {
-    callback: Function
-}
+interface SimpleLoginProps { }
 
 interface SimpleLoginState {
     url: string
-    spotifyCredentials: object
+    spotifyCredentials: SpotifyCredentials | null
+    user: SpotifyUser | null
+    connected: boolean
 }
 
-export default class Login extends React.Component<SimpleLoginProps, SimpleLoginState> {
+export default class SimpleLogin extends React.Component<SimpleLoginProps, SimpleLoginState> {
     constructor(props) {
         super(props)
         this.state = {
+            connected: false,
             url: this.buildUrl(),
-            spotifyCredentials: this.getSpotifyCredential()
+            spotifyCredentials: this.getSpotifyCredential(),
+            user: null
         }
     }
 
+    async componentDidMount() {
+        await this.getUserData();
+    }
+
     render() {
+        const { connected, user, spotifyCredentials } = this.state;
         return <div className="simple-login">
-            <Button color="inherit" style={{ marginTop: 6 }} href={this.state.url} > Login to spotify </Button>
-        </div>
+            <UserContext.Consumer>
+                {({ toggleConnection }) => {
+                    if (this.state.connected) {
+                        toggleConnection(user, connected, spotifyCredentials)
+                    }
+                    return <Button color="inherit" href={this.state.url} > Login to spotify </Button>
+                }}
+            </UserContext.Consumer>
+        </div >
+    }
+
+    async getUserData() {
+        if (this.state.spotifyCredentials) {
+            const payload = await fetch('https://api.spotify.com/v1/me', {
+                method: 'get',
+                headers: new Headers({
+                    'Authorization': 'Bearer ' + this.state.spotifyCredentials.access_token,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                })
+            });
+            const data = await payload.json()
+            this.setState({
+                connected: true,
+                user: data
+            });
+            return data;
+        }
+        return null
     }
 
     buildUrl() {
@@ -41,7 +75,6 @@ export default class Login extends React.Component<SimpleLoginProps, SimpleLogin
     getSpotifyCredential() {
         const credentials = window.location.hash.length ? this.parseHash(window.location.hash) : null
         window.location.hash = "";
-        this.props.callback(credentials)
         return credentials
     }
 

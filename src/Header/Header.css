@@ -1,6 +1,5 @@
 .header {
     padding: 20px;
-    background-color: #eaf0ff;
 }
 
 h1 {
@@ -17,6 +16,8 @@ a {
 
 .header-burger {}
 
-.header-title {
+ThemeTogglerButton {
     flex-grow: 1;
 }
+
+.header-title {}

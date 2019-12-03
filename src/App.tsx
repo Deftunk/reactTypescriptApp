@@ -2,72 +2,67 @@ import React, { Component } from 'react'
 
 // You can find imports from custom components
 import Header from './Header/Header'
-import Separator from './Separator/Separator'
+import Body from './Board/Board';
+import { themes, ThemeContext } from './Themed-button/Theme-context';
 
 // Global style for the app is reach there
 import './App.css';
-import { Card, CardMedia, Grid, Container, CardActionArea, CardContent, Typography } from '@material-ui/core';
+import { UserContext } from './User/User-context';
+import { Box } from '@material-ui/core';
+
+
 
 interface AppProps {
 }
 
 interface AppState {
-  spotifyCredentials: object | null
-  spotifyUser: any
+  // spotifyCredentials and user must typed but there is a nullable error. Need to find a solution
+  spotifyCredentials: any
+  user: any,
+  connected: boolean,
+  theme: {
+    foreground: string
+    background: string
+  }
 }
 export default class App extends Component<AppProps, AppState> {
   constructor(props) {
     super(props)
     this.state = {
-      spotifyUser: null,
+      user: null,
+      connected: false,
       spotifyCredentials: null,
+      theme: themes.light
     }
   }
 
-  spotifyLoginCb = (user, credentials) => {
-    this.setState({
-      spotifyCredentials: credentials,
-      spotifyUser: user
-    });
+  toggleTheme = () => {
+    console.log('hello');
+    this.setState(state => ({
+      theme:
+        state.theme === themes.dark
+          ? themes.light
+          : themes.dark,
+    }));
+  };
+
+  toggleConnection = (user, connected, spotifyCredentials) => {
+    this.setState({ user: user, connected: connected, spotifyCredentials: spotifyCredentials })
   }
 
   render = () => {
-    if (this.state.spotifyUser) {
-      console.log(this.state.spotifyUser.images);
-    }
-
-    return <div className="App">
-      <Header connexionCallback={this.spotifyLoginCb} />
-      <Container>
-        <Grid container
-          direction="column"
-          justify="center"
-          alignItems="stretch">
-          <Grid item>
-            <Grid container direction="row" justify="center">
-              <Grid item>
-                {this.state.spotifyUser ? <Card style={{ maxWidth: 345 }}>
-                  <CardActionArea>
-                    <CardMedia
-                      style={{ height: 140, width: 300 }}
-                      image={this.state.spotifyUser.images[0].url}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {this.state.spotifyUser.display_name}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card> : <div></div>}
-              </Grid>
-
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Separator />
-          </Grid>
-        </Grid>
-      </Container>
-    </div>
+    const { theme, user, spotifyCredentials, connected } = this.state;
+    return <UserContext.Provider value={{ user, spotifyCredentials, toggleConnection: this.toggleConnection, connected }}>
+      <ThemeContext.Provider value={{ theme, toggleTheme: this.toggleTheme }}>
+        <ThemeContext.Consumer>
+          {({ theme }) => (
+            <Box className="App" style={{ backgroundColor: theme.background }} height="100%">
+              <Header />
+              <Body></Body>
+            </Box>
+          )}
+        </ThemeContext.Consumer>
+      </ThemeContext.Provider>
+    </UserContext.Provider >
   };
 }
