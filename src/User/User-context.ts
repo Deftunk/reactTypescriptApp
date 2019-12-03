@@ -1,6 +1,6 @@
 import React from "react";
 
-export type SpotifyUser = {
+export interface SpotifyUser {
     display_name: string
     email: string
     external_urls: {
@@ -12,18 +12,16 @@ export type SpotifyUser = {
     }
     href: string
     id: string
-    images: [
-        {
-            height: any
-            url: string
-            width: any
-        }
-    ]
+    images: {
+        height: any
+        url: string
+        width: any
+    }[]
     type: string
     uri: string
 }
 
-export type SpotifyCredentials = {
+export interface SpotifyCredentials {
     access_token: string
     expires_in: string
     token_type: string
@@ -42,7 +40,7 @@ export const UserContext = React.createContext({
         },
         href: "",
         id: "",
-        images: [{ url: "" }],
+        images: [{ url: "", width: 0, height: 0 }],
         type: "",
         uri: ""
     },

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 // You can find imports from custom components
 import Header from './Header/Header'
-import Body from './Board/Board';
+import Board from './Board/Board';
 import { themes, ThemeContext } from './Themed-button/Theme-context';
 
 // Global style for the app is reach there
@@ -32,7 +32,7 @@ export default class App extends Component<AppProps, AppState> {
       user: null,
       connected: false,
       spotifyCredentials: null,
-      theme: themes.light
+      theme: themes.dark
     }
   }
 
@@ -58,7 +58,7 @@ export default class App extends Component<AppProps, AppState> {
           {({ theme }) => (
             <Box className="App" style={{ backgroundColor: theme.background }} height="100%">
               <Header />
-              <Body></Body>
+              <Board></Board>
             </Box>
           )}
         </ThemeContext.Consumer>

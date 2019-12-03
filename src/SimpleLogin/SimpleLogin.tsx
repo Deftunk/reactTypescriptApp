@@ -55,10 +55,8 @@ export default class SimpleLogin extends React.Component<SimpleLoginProps, Simpl
             this.setState({
                 connected: true,
                 user: data
-            });
-            return data;
-        }
-        return null
+            });         
+        }        
     }
 
     buildUrl() {
@@ -68,6 +66,7 @@ export default class SimpleLogin extends React.Component<SimpleLoginProps, Simpl
             "user-read-email",
             "user-read-currently-playing",
             "user-read-playback-state",
+            "user-library-read"
         ];
         return `${authEndpoint}?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes.join(" "))}&response_type=token&show_dialog=true`
     }
