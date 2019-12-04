@@ -12,7 +12,6 @@ export default class Tracks extends React.Component<TracksProps, TracksState> {
 
 
     async componentDidMount() {
-        console.log("Hello poto");
         const payload = await fetch('https://api.spotify.com/v1/me/tracks', {
             method: 'get',
             headers: new Headers({
@@ -21,14 +20,13 @@ export default class Tracks extends React.Component<TracksProps, TracksState> {
             })
         });
         const data = await payload.json()
-        console.log(data);
         this.setState({
             tracks: data.items
         });
     }
 
     render = () => {
-        if (this.state && this.state.tracks.length) {            
+        if (this.state && this.state.tracks.length) {
             return <GridList cellHeight={160} cols={3}>
                 {this.state.tracks.map(({ track }) => (
                     <GridListTile key={track.id}>

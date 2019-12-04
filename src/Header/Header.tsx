@@ -3,7 +3,7 @@ import { AppBar, IconButton, Typography, Button, Toolbar, Grid } from '@material
 import MenuIcon from '@material-ui/icons/Menu';
 
 import './Header.css'
-import SimpleLogin from '../SimpleLogin/SimpleLogin'
+import SimpleLogin from '../SpotifyLogin/SpotifyLogin'
 import { UserContext } from '../User/User-context'
 import ThemeTogglerButton from '../Themed-button/Themed-button';
 

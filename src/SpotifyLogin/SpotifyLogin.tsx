@@ -4,16 +4,16 @@ import { UserContext, SpotifyUser, SpotifyCredentials } from '../User/User-conte
 
 export const authEndpoint = 'https://accounts.spotify.com/authorize';
 
-interface SimpleLoginProps { }
+interface SpotifyLoginProps { }
 
-interface SimpleLoginState {
+interface SpotifyLoginState {
     url: string
     spotifyCredentials: SpotifyCredentials | null
     user: SpotifyUser | null
     connected: boolean
 }
 
-export default class SimpleLogin extends React.Component<SimpleLoginProps, SimpleLoginState> {
+export default class SpotifyLogin extends React.Component<SpotifyLoginProps, SpotifyLoginState> {
     constructor(props) {
         super(props)
         this.state = {
@@ -30,7 +30,7 @@ export default class SimpleLogin extends React.Component<SimpleLoginProps, Simpl
 
     render() {
         const { connected, user, spotifyCredentials } = this.state;
-        return <div className="simple-login">
+        return <div className="spotify-login">
             <UserContext.Consumer>
                 {({ toggleConnection }) => {
                     if (this.state.connected) {
@@ -44,19 +44,15 @@ export default class SimpleLogin extends React.Component<SimpleLoginProps, Simpl
 
     async getUserData() {
         if (this.state.spotifyCredentials) {
-            const payload = await fetch('https://api.spotify.com/v1/me', {
-                method: 'get',
-                headers: new Headers({
-                    'Authorization': 'Bearer ' + this.state.spotifyCredentials.access_token,
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                })
+            const payload = await fetch(`http://localhost:3001/spotify/me?access_token=${this.state.spotifyCredentials.access_token}`, {
+                method: 'get'
             });
             const data = await payload.json()
             this.setState({
                 connected: true,
-                user: data
-            });         
-        }        
+                user: data.body
+            });
+        }
     }
 
     buildUrl() {

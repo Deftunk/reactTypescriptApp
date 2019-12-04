@@ -37,7 +37,6 @@ export default class App extends Component<AppProps, AppState> {
   }
 
   toggleTheme = () => {
-    console.log('hello');
     this.setState(state => ({
       theme:
         state.theme === themes.dark

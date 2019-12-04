@@ -1,6 +1,6 @@
 import React from "react";
 import { SpotifyUser } from "./User-context";
-import { Card, CardActionArea, CardMedia, CardContent, Typography, Grid, Paper} from "@material-ui/core";
+import { Card, CardActionArea, CardMedia, CardContent, Typography, Grid, Paper } from "@material-ui/core";
 import './User-card.css'
 
 interface UserCardProps {
@@ -12,7 +12,6 @@ interface UserCardState { }
 export default class UserCard extends React.Component<UserCardProps, UserCardState> {
     render = () => {
         const { user } = this.props;
-        console.log(user);
         return <Grid container spacing={4}
             justify="center"
             alignItems="center">
