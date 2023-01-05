@@ -11,7 +11,7 @@
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-scripts": "3.2.0",
-    "react-scripts-ts": "^3.1.0"
+    "react-scripts-ts": "^4.0.8"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -41,7 +41,7 @@
     "@types/react-dom": "^16.9.3",
     "css-loader": "^3.2.0",
     "source-map-loader": "^0.2.4",
-    "svg-inline-loader": "^0.8.0",
+    "svg-inline-loader": "^0.8.2",
     "ts-loader": "^6.2.1",
     "typescript": "^3.6.4",
     "webpack": "^4.41.0",
